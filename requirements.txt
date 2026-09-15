@@ -1,5 +1,9 @@
 flask
 twilio
-requess
+requests
 python-dotenv
 pillow
+gunicorn
+
+
+add gunicorn
