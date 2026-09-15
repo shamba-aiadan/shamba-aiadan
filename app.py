@@ -1,23 +1,21 @@
-rom flask import Flask, request
+from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+return "Shamba AI is running successfully!"
+
 @app.route("/whatsapp", methods=["POST"])
 def whatsapp_reply():
-# Get the incoming message
-incoming_msg = request.values.get("Body", "").lower()
 media_url = request.values.get("MediaUrl0", None)
 
 resp = MessagingResponse()
 msg = resp.message()
 
 if media_url:
-# Temporary simple reply (we will upgrade the diagnosis later)
 msg.body(
 "Asante kwa kutuma picha!\n\n"
 "Nimepokea picha ya mmea wako.\n"
@@ -34,4 +32,5 @@ msg.body(
 return str(resp)
 
 if __name__ == "__main__":
-app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
