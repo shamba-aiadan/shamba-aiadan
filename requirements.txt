@@ -1,6 +1,1 @@
 flask
-twilio
-requests
-python-dotenv
-pillow
-gunicorn
