@@ -4,6 +4,3 @@ requests
 python-dotenv
 pillow
 gunicorn
-
-
-add gunicorn
