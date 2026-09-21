@@ -1,34 +1,40 @@
 from flask import Flask, request
-from twilio.twiml.messaging_response import MessagingResponse
 import os
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-return "Shamba AI is running"
+return """
+<html>
+<body style="font-family: Arial; padding: 20px;">
+<h2>Shamba AI</h2>
+<p>Upload a plant leaf photo.</p>
+<form action="/diagnose" method="post" enctype="multipart/form-data">
+<input type="file" name="photo" accept="image/*" required>
+<br><br>
+<button type="submit">Check plant</button>
+</form>
+</body>
+</html>
+"""
 
-@app.route("/whatsapp", methods=["POST"])
-def whatsapp_reply():
-media_url = request.values.get("MediaUrl0", None)
+@app.route("/diagnose", methods=["POST"])
+def diagnose():
+photo = request.files.get("photo")
+if not photo:
+return "Please upload a photo."
 
-resp = MessagingResponse()
-msg = resp.message()
-
-if media_url:
-msg.body(
-"Asante kwa kutuma picha!\n\n"
-"Nimepokea picha ya mmea wako.\n"
-"Kwa sasa niko katika hatua ya majaribio.\n\n"
-"Thank you for the photo. Full diagnosis is coming soon."
-)
-else:
-msg.body(
-"Habari! Tuma picha ya jani la mmea ili niweze kukusaidia.\n\n"
-"Hello! Please send a photo of a plant leaf so I can help you."
-)
-
-return str(resp)
+return """
+<html>
+<body style="font-family: Arial; padding: 20px;">
+<h2>Shamba AI</h2>
+<p>Photo received.</p>
+<p>Diagnosis is not ready yet. This is the test page.</p>
+<p><a href="/">Upload another photo</a></p>
+</body>
+</html>
+"""
 
 if __name__ == "__main__":
 port = int(os.environ.get("PORT", 5000))
